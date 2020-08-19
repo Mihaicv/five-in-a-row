@@ -1,6 +1,5 @@
 package com.codecool.fiveinarow;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -10,7 +9,6 @@ public class Game implements GameInterface {
     private int[] lastMove = new int[2];
     Scanner scanner = new Scanner(System.in);
 
-
     public Game(int nRows, int nCols) {
 
         int[][] board = new int[nRows][nCols];
@@ -18,9 +16,6 @@ public class Game implements GameInterface {
             Arrays.fill(row, 0);
         }
         this.setBoard(board);
-//        printBoard();
-//        getMove(1);
-
     }
 
     public int[][] getBoard() {
@@ -32,9 +27,8 @@ public class Game implements GameInterface {
     }
 
     public int[] getMove(int player) {
-
         while (true) {
-            System.out.printf("Player %s move: ", player);
+            System.out.printf("Player %s move: ", player == -1 ? "player 2" : "player 1");
             String line = scanner.nextLine();
 
             if (!Character.isDigit(line.charAt(1)) || line.length() != Integer.parseInt(String.valueOf(line.substring(1).length())) + 1 ||
@@ -45,8 +39,8 @@ public class Game implements GameInterface {
             } else {
                 lastMove[1] = Integer.parseInt(line.substring(1)) - 1;
                 lastMove[0] = (int) (Character.toString(line.charAt(0)).toUpperCase().charAt(0)) - 65;
-                if (board[lastMove[0]][lastMove[1]] == 1 || board[lastMove[0]][lastMove[1]] == -1) {
-                    System.out.println("teapa, locul e este ocupat");
+                if (board[lastMove[0]][lastMove[1]] == 1 || board[lastMove[0]][lastMove[1]] == 2) {
+                    System.out.println("This place is ocupied");
                     continue;
                 }
                 break;
@@ -100,14 +94,17 @@ public class Game implements GameInterface {
             l++;
             c++;
         }
+        if (count == howMany) {
+            return true;
+        }
         return false;
     }
 
     public boolean isFull() {
         int count = 0;
-        for(int i = 0 ; i < board.length; i++){
+        for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++)
-                if(board[i][j] == 0)
+                if (board[i][j] == 0)
                     count++;
         }
         return count == 0;
@@ -165,14 +162,15 @@ public class Game implements GameInterface {
             if (lastMove != null) {
                 mark(actualPlayer, lastMove[0], lastMove[1]);
             }
-            if(isFull()){
-                System.out.println("Board is full");
+            if (hasWon(actualPlayer, howMany)) {
+                System.out.printf("Player %s has won", actualPlayer == -1 ? "player 2" : "player 1");
                 break;
             }
-            if(hasWon(actualPlayer,howMany)){
-                System.out.printf("Player %s has won",actualPlayer);
+            if (isFull()) {
+                System.out.println("Board is full. Is a TIE");
                 break;
             }
+
             actualPlayer = -actualPlayer;
 
         }
