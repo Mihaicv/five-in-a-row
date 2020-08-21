@@ -31,7 +31,7 @@ public class Game implements GameInterface {
             System.out.printf("Player %s move: ", player == -1 ? "player 2" : "player 1");
             String line = scanner.nextLine();
 
-            if(line.length()==1){
+            if(line.length()<=1){
                 System.out.println("Please insert a valid move");
             }else if (!Character.isDigit(line.charAt(1)) || line.length() != Integer.parseInt(String.valueOf(line.substring(1).length())) + 1 ||
                     Integer.parseInt(line.substring(1)) > board[0].length || !Character.isLetter(line.charAt(0)) || Character.getNumericValue(line.charAt(1)) < 1 ||
